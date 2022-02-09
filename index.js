@@ -60,7 +60,7 @@ function getWeekCount(user){
             .then((html) => {
                 const $ = cheerio.load(html.data);
                 var weekcount = 0;
-                for(var i = 0; i <= 6; i++){
+                for(var i = 0; i <= moment().day(); i++){
                     $(`rect[data-date="${moment(moment().format()).add(-i, "days").format("YYYY-MM-DD")}"].ContributionCalendar-day`)
                         .each(function(){
                             console.log(i, moment(moment().format()).add(-i, "days").format("YYYY-MM-DD"), Number($(this).attr("data-count")));
