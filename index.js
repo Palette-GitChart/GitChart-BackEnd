@@ -23,7 +23,7 @@ function getYearCount(user){
         getHTML(user)
             .then((html) => {
                 const $ = cheerio.load(html.data);
-                var yearcount = $(`h2.f4 text-normal mb-2`).text();
+                var yearcount = $(`body > div > div:nth-child(1) > h2`).text();
                 yearcount = yearcount.replaceAll(" ", "");
                 yearcount = yearcount.replaceAll(/\n/g, "");
                 yearcount = yearcount.replaceAll("contributionsinthelastyear", "");
@@ -59,7 +59,7 @@ function getWeekCount(user){
             .then((html) => {
                 const $ = cheerio.load(html.data);
                 var weekcount = 0;
-                for(var i = 0; i <= moment().day(); i++){
+                for(var i = 0; i <= moment().date(); i++){
                     $(`rect[data-date="${moment(moment().format()).add(-i, "days").format("YYYY-MM-DD")}"].ContributionCalendar-day`)
                         .each(function(){
                             console.log(i, moment(moment().format()).add(-i, "days").format("YYYY-MM-DD"), Number($(this).attr("data-count")));
@@ -78,10 +78,10 @@ function getWeekArray(user){
             .then((html) => {
                 const $ = cheerio.load(html.data);
                 var weekarray = [];
-                for(var i = 0; i <= moment().day(); i++){
+                for(var i = 0; i <= moment().date(); i++){
                     $(`rect[data-date="${moment(moment().format()).add(-i, "days").format("YYYY-MM-DD")}"].ContributionCalendar-day`)
                         .each(function(){
-                            weekarray.pushNumber($(this).attr("data-count"))
+                            weekarray.unshift(Number($(this).attr("data-count")))
                     })
                 }
                 resolve(weekarray);
@@ -95,15 +95,16 @@ function getMonthCount(user){
         getHTML(user)
             .then((html) => {
                 const $ = cheerio.load(html.data);
-                var montharray = 0;
-                var day = moment.format('days');
+                var monthcount = 0;
+                var day = moment().date();
+                console.log(day);
                 for(var i = 0; i < day; i++){
                     $(`rect[data-date="${moment(moment().format()).add(-i, "days").format("YYYY-MM-DD")}"].ContributionCalendar-day`)
                         .each(function(){
-                            montharray += Number($(this).attr("data-count"))
+                            monthcount += Number($(this).attr("data-count"))
                     })
                 }
-                resolve(montharray);
+                resolve(monthcount);
             }
         )
     })
@@ -115,11 +116,11 @@ function getMonthArray(user){
             .then((html) => {
                 const $ = cheerio.load(html.data);
                 var montharray = [];
-                var day = moment.format('days');
+                var day = moment().date();
                 for(var i = 0; i < day; i++){
                     $(`rect[data-date="${moment(moment().format()).add(-i, "days").format("YYYY-MM-DD")}"].ContributionCalendar-day`)
                         .each(function(){
-                            montharray.push(Number($(this).attr("data-count")))
+                            montharray.unshift(Number($(this).attr("data-count")))
                     })
                 }
                 resolve(montharray);
@@ -127,7 +128,6 @@ function getMonthArray(user){
         )
     })
 }
-
 
 function getYearArray(user){
     return new Promise((resolve, reject) => {
@@ -139,8 +139,6 @@ function getYearArray(user){
                     .each(function(){
                         if($(this).attr("data-count"))
                             yeararray.push(Number($(this).attr("data-count")))
-                        else
-                            yeararray.push(0);
                 })
                 resolve(yeararray);
             }
