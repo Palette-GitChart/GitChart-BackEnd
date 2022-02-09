@@ -81,7 +81,10 @@ function getYearArray(user){
                 const yeararray = [];
                 $(`rect.ContributionCalendar-day`)
                     .each(function(){
-                        yeararray.push(Number($(this).attr("data-count")))
+                        if($(this).attr("data-count"))
+                            yeararray.push(Number($(this).attr("data-count")))
+                        else
+                            yeararray.push(0);
                 })
                 resolve(yeararray);
             }
