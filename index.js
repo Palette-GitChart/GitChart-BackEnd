@@ -26,8 +26,9 @@ function getYearCount(user){
                 var yearcount = 0;
                 $(`rect.ContributionCalendar-day`)
                     .each(function(){
-                        yearcount += Number($(this).attr("data-count"))
-                    })
+                        if($(this).attr("data-count"))
+                            yearcount += Number($(this).attr("data-count"))
+                })
                 resolve(yearcount);
                 /*
                 const yearcount = $('body > div > div:nth-child(1) > h2.f4 text-normal mb-2').text();
