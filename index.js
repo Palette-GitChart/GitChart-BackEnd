@@ -24,10 +24,10 @@ function getYearCount(user){
             .then((html) => {
                 const $ = cheerio.load(html.data);
                 var yearcount = $(`body > div > div:nth-child(1) > h2`).text();
-                yearcount = yearcount.replaceAll(" ", "");
+                /*yearcount = yearcount.replaceAll(" ", "");
                 yearcount = yearcount.replaceAll(/\n/g, "");
                 yearcount = yearcount.replaceAll("contributionsinthelastyear", "");
-                yearcount = Number(yearcount);
+                yearcount = Number(yearcount);*/
                 resolve(yearcount);
                 /*
                 const yearcount = $('body > div > div:nth-child(1) > h2.f4 text-normal mb-2').text();
@@ -59,7 +59,7 @@ function getWeekCount(user){
             .then((html) => {
                 const $ = cheerio.load(html.data);
                 var weekcount = 0;
-                for(var i = 0; i <= moment().date(); i++){
+                for(var i = 0; i <= moment().day(); i++){
                     $(`rect[data-date="${moment(moment().format()).add(-i, "days").format("YYYY-MM-DD")}"].ContributionCalendar-day`)
                         .each(function(){
                             console.log(i, moment(moment().format()).add(-i, "days").format("YYYY-MM-DD"), Number($(this).attr("data-count")));
@@ -78,7 +78,7 @@ function getWeekArray(user){
             .then((html) => {
                 const $ = cheerio.load(html.data);
                 var weekarray = [];
-                for(var i = 0; i <= moment().date(); i++){
+                for(var i = 0; i <= moment().day(); i++){
                     $(`rect[data-date="${moment(moment().format()).add(-i, "days").format("YYYY-MM-DD")}"].ContributionCalendar-day`)
                         .each(function(){
                             weekarray.unshift(Number($(this).attr("data-count")))
