@@ -23,7 +23,7 @@ function getYearCount(user){
         getHTML(user)
             .then((html) => {
                 const $ = cheerio.load(html.data);
-                const yearcount = $('body > div > div > h2').text();
+                const yearcount = $('body > div > div:nth-child(1) > h2.f4 text-normal mb-2').text();
                 resolve(yearcount.replaceAll(" ", "").replaceAll(/\n/g, "").replaceAll("contributionsinthelastyear", ""));
             }
         )
@@ -84,7 +84,7 @@ function getYearArray(user){
 
 app.get('/:user/yearcount', async(req, res) => {
     const data = await getYearCount(req.params.user); 
-    res.json(Number(data));
+    res.json(data);
 })
 
 app.get('/:user/daycount', async(req, res) => {
