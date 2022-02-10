@@ -23,11 +23,8 @@ function getYearCount(user){
         getHTML(user)
             .then((html) => {
                 const $ = cheerio.load(html.data);
-                var yearcount = $(`body > div > div:nth-child(1) > h2`).text();
-                yearcount = yearcount.replaceAll(" ", "");
-                yearcount = yearcount.replaceAll(/\n/g, "");
-                yearcount = yearcount.replaceAll("contributionsinthelastyear", "");
-                resolve(Number(yearcount));
+                var year = $(`body > div > div:nth-child(1) > h2`).text();
+                resolve(Number(year.replaceAll(/[^0-9]/g,'')));
                 /*
                 const yearcount = $('body > div > div:nth-child(1) > h2.f4 text-normal mb-2').text();
                 resolve(yearcount.replaceAll(" ", "").replaceAll(/\n/g, "").replaceAll("contributionsinthelastyear", ""));*/
