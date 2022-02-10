@@ -5,7 +5,6 @@ app.use(cors())
 const axios = require('axios');
 const cheerio = require('cheerio');
 const moment = require('moment');
-const log = console.log;
 require('moment-timezone'); 
 moment.tz.setDefault("Asia/Seoul"); 
 
@@ -96,7 +95,6 @@ function getMonthCount(user){
                 const $ = cheerio.load(html.data);
                 var monthcount = 0;
                 var day = moment().date();
-                console.log(day);
                 for(var i = 0; i < day; i++){
                     $(`rect[data-date="${moment(moment().format()).add(-i, "days").format("YYYY-MM-DD")}"].ContributionCalendar-day`)
                         .each(function(){
