@@ -56,15 +56,13 @@ function getWeekCount(user){
         getHTML(user)
             .then((html) => {
                 const $ = cheerio.load(html.data);
-                var weekcount = 0;
-                for(var i = 0; i <= moment().day(); i++){
-                    $(`rect[data-date="${moment(moment().format()).add(-i, "days").format("YYYY-MM-DD")}"].ContributionCalendar-day`)
-                        .each(function(){
-                            console.log(i, moment(moment().format()).add(-i, "days").format("YYYY-MM-DD"), Number($(this).attr("data-count")));
-                            weekcount += Number($(this).attr("data-count"))
-                    })
-                }
-                resolve(weekcount);
+                var yearcount = 0;
+                $(`rect.ContributionCalendar-day`)
+                    .each(function(){
+                        if($(this).attr("data-count"))
+                            yearcount += Number($(this).attr("data-count"));
+                })
+                resolve(yearcount);
             }
         )
     })
