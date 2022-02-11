@@ -5,6 +5,8 @@ app.use(cors())
 const axios = require('axios');
 const cheerio = require('cheerio');
 const moment = require('moment');
+require('moment-timezone'); 
+moment.tz.setDefault("Asia/Seoul"); 
 
 function getHTML(user){
     user = encodeURI(user);
