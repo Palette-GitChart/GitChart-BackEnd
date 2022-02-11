@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
-app.use(cors())
+app.use(cors());
 const axios = require('axios');
 const cheerio = require('cheerio');
 const moment = require('moment');
@@ -11,7 +11,12 @@ moment.tz.setDefault("Asia/Seoul");
 function getHTML(user){
     user = encodeURI(user);
     try {
-        return axios.get(`https://github.com/users/${user}/contributions`);
+        return axios.get(`https://github.com/users/${user}/contributions`, {            
+            headers: {
+                withCredentials: true,
+                "Cookie": "tz=Asia%2FSeoul; logged_in=yes;"
+            }
+        });
     }catch(err){
         console.log(err);
     }
