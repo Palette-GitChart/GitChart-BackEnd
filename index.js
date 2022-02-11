@@ -5,8 +5,6 @@ app.use(cors())
 const axios = require('axios');
 const cheerio = require('cheerio');
 const moment = require('moment');
-require('moment-timezone'); 
-moment.tz.setDefault("Asia/Seoul"); 
 
 function getHTML(user){
     user = encodeURI(user);
@@ -29,9 +27,6 @@ function getYearCount(user){
                             yearcount += (Number($(this).attr("data-count")))
                 })
                 resolve(yearcount);
-                /*
-                const yearcount = $('body > div > div:nth-child(1) > h2.f4 text-normal mb-2').text();
-                resolve(yearcount.replaceAll(" ", "").replaceAll(/\n/g, "").replaceAll("contributionsinthelastyear", ""));*/
             }
         )
     })
