@@ -3,7 +3,7 @@ module.exports = {
         {
             name: 'githubCrawler',
             script: './index.js',
-            instances: 0,
+            instances: 4,
             exec_mode: 'cluster'
         }
     ]
