@@ -149,9 +149,9 @@ function getUser(user){
     return new Promise((resolve, reject) => {
         const yeararray = [];
         const montharray = [];
-        var yearcount;
-        var monthcount;
-        var daycount;
+        var yearcount = 0;
+        var monthcount = 0;
+        var daycount = 0;
         var day = moment().date();
         var i = 0;
         getHTML(user) 
