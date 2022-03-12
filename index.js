@@ -181,7 +181,7 @@ function getUser(user){
                             daycount += Number(count);
                         }
                 })
-                resolve({yeararray: yeararray, yearcount: yearcount, montharray: montharray, monthcount: monthcount, daycount: daycount});
+                resolve({yeararray: yeararray, yearcount: yearcount, montharray: montharray, monthcount: monthcount, weekarray: weekarray, weekcount: weekcount, daycount: daycount});
             }
         )
     })
