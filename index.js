@@ -159,15 +159,16 @@ function getUser(user){
                 const $ = cheerio.load(html.data);
                 $(`rect.ContributionCalendar-day`)
                     .each(function(){
-                        if($(this).attr("data-count"))
+                        if($(this).attr("data-count")){
                             yeararray.push(Number($(this).attr("data-count")));
                             yearcount += Number($(this).attr("data-count"));
-                        if(i < day && $(this).attr("dat-count") == moment(moment().format()).add(-i, "days").format("YYYY-MM-DD")){
+                        }
+                        if(i < day && $(this).attr("data-count") == `${moment(moment().format()).add(-i, "days").format("YYYY-MM-DD")}`){
                             montharray.unshift(Number($(this).attr("data-count")));
                             monthcount += Number($(this).attr("data-count"));
                             i++;
                         }
-                        if($(this).attr("data-count") == moment().format('YYYY-MM-DD')){
+                        if($(this).attr("data-count") == `${moment().format('YYYY-MM-DD')}`){
                             daycount += Number($(this).attr("data-count"));
                         }
                 })
