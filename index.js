@@ -145,6 +145,38 @@ function getYearArray(user){
     
 }
 
+function getUser(user){
+    return new Promise((resolve, reject) => {
+        const yeararray = [];
+        const montharray = [];
+        var yearcount;
+        var monthcount;
+        var daycount;
+        var day = moment().date();
+        var i = 0;
+        getHTML(user) 
+            .then((html) => {
+                const $ = cheerio.load(html.data);
+                $(`rect.ContributionCalendar-day`)
+                    .each(function(){
+                        if($(this).attr("data-count"))
+                            yeararray.push(Number($(this).attr("data-count")));
+                            yearcount += Number($(this).attr("data-count"));
+                        if(i < day && $(this).attr("dat-count") == moment(moment().format()).add(-i, "days").format("YYYY-MM-DD")){
+                            montharray.unshift(Number($(this).attr("data-count")));
+                            monthcount += Number($(this).attr("data-count"));
+                            i++;
+                        }
+                        if($(this).attr("data-count") == moment().format('YYYY-MM-DD')){
+                            daycount += Number($(this).attr("data-count"));
+                        }
+                })
+                resolve({yeararray: yeararray, yearcount: yearcount, montharray: montharray, monthcount: monthcount, daycount: daycount});
+            }
+        )
+    })
+}
+
 app.get('/:user/yearcount', async(req, res) => {
     const data = await getYearCount(req.params.user); 
     res.json(data);
@@ -178,6 +210,10 @@ app.get('/:user/montharray', async(req, res) => {
 app.get('/:user/yeararray', async(req, res) => {
     const data = await getYearArray(req.params.user);
     res.json(data);
+})
+
+app.get('/:user', async(req, res) => {
+
 })
 
 const server = app.listen(process.env.PORT || 5000, () => {
