@@ -213,7 +213,8 @@ app.get('/:user/yeararray', async(req, res) => {
 })
 
 app.get('/:user', async(req, res) => {
-
+    const data = await getUser(req.params.user);
+    res.json(data);
 })
 
 const server = app.listen(process.env.PORT || 5000, () => {
