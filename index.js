@@ -174,8 +174,9 @@ function getUser(user){
                             i++;
                         }
                         if(j <= moment().day() && date == `${moment(moment().format()).add(-i, "days").format("YYYY-MM-DD")}`){
-                            weekarray.unshift(Number(count))
-                            weekcount += Number(count)
+                            weekarray.unshift(Number(count));
+                            weekcount += Number(count);
+                            j++; 
                         }
                         if(date == `${moment().format('YYYY-MM-DD')}`){
                             daycount += Number(count);
