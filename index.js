@@ -149,27 +149,36 @@ function getUser(user){
     return new Promise((resolve, reject) => {
         const yeararray = [];
         const montharray = [];
+        const weekarray = [];
         var yearcount = 0;
         var monthcount = 0;
+        var weekcount = 0;
         var daycount = 0;
         var day = moment().date();
         var i = 0;
+        var j = 0;
         getHTML(user) 
             .then((html) => {
                 const $ = cheerio.load(html.data);
                 $(`rect.ContributionCalendar-day`)
                     .each(function(){
-                        if($(this).attr("data-count")){
-                            yeararray.push(Number($(this).attr("data-count")));
-                            yearcount += Number($(this).attr("data-count"));
+                        const count = $(this).attr("data-count");
+                        const date = $(this).attr("data-date");
+                        if(count){
+                            yeararray.push(Number(count));
+                            yearcount += Number(count);
                         }
-                        if(i < day && $(this).attr("data-count") == `${moment(moment().format()).add(-i, "days").format("YYYY-MM-DD")}`){
-                            montharray.unshift(Number($(this).attr("data-count")));
-                            monthcount += Number($(this).attr("data-count"));
+                        if(i < day && date == `${moment(moment().format()).add(-i, "days").format("YYYY-MM-DD")}`){
+                            montharray.unshift(Number(count));
+                            monthcount += Number(count);
                             i++;
                         }
-                        if($(this).attr("data-count") == `${moment().format('YYYY-MM-DD')}`){
-                            daycount += Number($(this).attr("data-count"));
+                        if(j <= moment().day() && date == `${moment(moment().format()).add(-i, "days").format("YYYY-MM-DD")}`){
+                            weekarray.unshift(Number(count))
+                            weekcount += Number(count)
+                        }
+                        if(date == `${moment().format('YYYY-MM-DD')}`){
+                            daycount += Number(count);
                         }
                 })
                 resolve({yeararray: yeararray, yearcount: yearcount, montharray: montharray, monthcount: monthcount, daycount: daycount});
