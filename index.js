@@ -50,11 +50,12 @@ app.get('/:user/daycount', function(req, res){
 })
 
 app.get('/:user/weekcount', function(req, res){
-    getHTML(user)
+    getHTML(req.params.user)
         .then((html) => {
             const $ = cheerio.load(html.data);
             var weekcount = 0;
-            for(var i = 0; i <= moment().day(); i++){
+            var day = moment().day();
+            for(var i = 0; i <= day; i++){
                 $(`rect[data-date="${moment(moment().format()).add(-i, "days").format("YYYY-MM-DD")}"].ContributionCalendar-day`)
                     .each(function(){
                         weekcount += Number($(this).attr("data-count"))
@@ -66,11 +67,12 @@ app.get('/:user/weekcount', function(req, res){
 })
 
 app.get('/:user/weekarray', function(req, res){
-    getHTML(user)
+    getHTML(req.params.user)
         .then((html) => {
             const $ = cheerio.load(html.data);
             var weekarray = [];
-            for(var i = 0; i <= moment().day(); i++){
+            var day = moment().day();
+            for(var i = 0; i <= day; i++){
                 $(`rect[data-date="${moment(moment().format()).add(-i, "days").format("YYYY-MM-DD")}"].ContributionCalendar-day`)
                     .each(function(){
                         weekarray.unshift(Number($(this).attr("data-count")))
@@ -131,9 +133,7 @@ app.get('/:user/yeararray', function(req, res){
 })
 
 app.get('/:user', function(req, res){
-    const yeararray = [];
     const montharray = [];
-    const weekarray = [];
     var yearcount = 0;
     var monthcount = 0;
     var weekcount = 0;
@@ -148,7 +148,6 @@ app.get('/:user', function(req, res){
                     const count = $(this).attr("data-count");
                     const date = $(this).attr("data-date");
                     if(count){
-                        yeararray.push(Number(count));
                         yearcount += Number(count);
                     }
                     if(mdate >= 0 && date == `${moment(moment().format()).add(-mdate, "days").format("YYYY-MM-DD")}`){
@@ -157,7 +156,6 @@ app.get('/:user', function(req, res){
                         mdate--;
                     }
                     if(mday >= 0 && date == `${moment(moment().format()).add(-mday, "days").format("YYYY-MM-DD")}`){
-                        weekarray.unshift(Number(count));
                         weekcount += Number(count);
                         mday--; 
                     }
@@ -165,7 +163,7 @@ app.get('/:user', function(req, res){
                         daycount += Number(count);
                     }
             })
-            res.json({yeararray: yeararray, yearcount: yearcount, montharray: montharray, monthcount: monthcount, weekarray: weekarray, weekcount: weekcount, daycount: daycount});
+            res.json({yearcount: yearcount, montharray: montharray, monthcount: monthcount, weekcount: weekcount, daycount: daycount});
         })
 })
 
