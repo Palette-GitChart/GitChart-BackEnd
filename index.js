@@ -16,7 +16,7 @@ function getHTML(user){
             }
         });
     }catch(err){
-        console.log(err);
+        return false;
     }
 }
 
@@ -31,8 +31,10 @@ app.get('/:user/yearcount', function(req, res){
                         yearcount += (Number($(this).attr("data-count")))
             })
             res.json(yearcount);
-        }
-    )
+        })
+        .catch(err => {
+            res.status(err.status).send(err)
+        })
 })
 
 app.get('/:user/daycount', function(req, res){
@@ -45,8 +47,10 @@ app.get('/:user/daycount', function(req, res){
                     daycount += Number($(this).attr("data-count"))
             })
             res.json(daycount);
-        }
-    )
+        })
+        .catch(err => {
+            res.status(err.status).send(err)
+        })
 })
 
 app.get('/:user/weekcount', function(req, res){
@@ -62,8 +66,10 @@ app.get('/:user/weekcount', function(req, res){
                 })
             }
             res.json(weekcount);
-        }
-    )
+        })
+        .catch(err => {
+            res.status(err.status).send(err)
+        })
 })
 
 app.get('/:user/weekarray', function(req, res){
@@ -79,8 +85,10 @@ app.get('/:user/weekarray', function(req, res){
                 })
             }
             res.json(weekarray);
-        }
-    )
+        })
+        .catch(err => {
+            res.status(err.status).send(err)
+        })
 })
 
 app.get('/:user/monthcount', function(req, res){
@@ -96,8 +104,10 @@ app.get('/:user/monthcount', function(req, res){
                 })
             }
             res.json(monthcount);
-        }
-    )
+        })
+        .catch(err => {
+            res.status(err.status).send(err)
+        })
 })
 
 app.get('/:user/montharray', function(req, res){
@@ -115,6 +125,9 @@ app.get('/:user/montharray', function(req, res){
             res.json(montharray);
         }
     )
+    .catch(err => {
+        res.status(err.status).send(err)
+    })
 })
 
 app.get('/:user/yeararray', function(req, res){
@@ -128,8 +141,10 @@ app.get('/:user/yeararray', function(req, res){
                         yeararray.push(Number($(this).attr("data-count")))
             })
             res.json(yeararray);
-        }
-    )
+        })
+        .catch(err => {
+            res.status(err.status).send(err)
+        })
 })
 
 app.get('/:user', function(req, res){
@@ -165,9 +180,12 @@ app.get('/:user', function(req, res){
             })
             res.json({yearcount: yearcount, montharray: montharray, monthcount: monthcount, weekcount: weekcount, daycount: daycount});
         })
+        .catch(err => {
+            res.status(err.status).send(err)
+        })
 })
 
 const server = app.listen(process.env.PORT || 5000, () => {
     const port = server.address().port;
     console.log(`Express is working on port ${port}`);
-});
+}, 600000);
