@@ -4,7 +4,9 @@ const cors = require('cors');
 app.use(cors());
 const axios = require('axios');
 const cheerio = require('cheerio');
-const moment = require('moment');
+const dayjs = require('dayjs');
+require('dayjs/locale/ko');
+dayjs.locale('ko') ;
 
 function getHTML(user){
     user = encodeURI(user);
@@ -16,7 +18,7 @@ function getHTML(user){
             }
         });
     }catch(err){
-        return false;
+        console.log(err);
     }
 }
 
@@ -24,7 +26,7 @@ app.get('/:user/yearcount', function(req, res){
     getHTML(req.params.user)
         .then((html) => {
             const $ = cheerio.load(html.data);
-            var yearcount = 0;
+            let yearcount = 0;
             $(`rect.ContributionCalendar-day`)
                 .each(function(){
                     if($(this).attr("data-count"))
@@ -41,8 +43,8 @@ app.get('/:user/daycount', function(req, res){
     getHTML(req.params.user)
         .then((html) => {
             const $ = cheerio.load(html.data);
-            var daycount = 0;
-            $(`rect[data-date="${moment().format('YYYY-MM-DD')}"].ContributionCalendar-day`)
+            let daycount = 0;
+            $(`rect[data-date="${dayjs().format('YYYY-MM-DD')}"].ContributionCalendar-day`)
                 .each(function(){
                     daycount += Number($(this).attr("data-count"))
             })
@@ -57,10 +59,10 @@ app.get('/:user/weekcount', function(req, res){
     getHTML(req.params.user)
         .then((html) => {
             const $ = cheerio.load(html.data);
-            var weekcount = 0;
-            var day = moment().day();
-            for(var i = 0; i <= day; i++){
-                $(`rect[data-date="${moment(moment().format()).add(-i, "days").format("YYYY-MM-DD")}"].ContributionCalendar-day`)
+            let weekcount = 0;
+            let day = dayjs().day();
+            for(let i = 0; i <= day; i++){
+                $(`rect[data-date="${dayjs(dayjs().format()).add(-i, "d").format("YYYY-MM-DD")}"].ContributionCalendar-day`)
                     .each(function(){
                         weekcount += Number($(this).attr("data-count"))
                 })
@@ -76,10 +78,10 @@ app.get('/:user/weekarray', function(req, res){
     getHTML(req.params.user)
         .then((html) => {
             const $ = cheerio.load(html.data);
-            var weekarray = [];
-            var day = moment().day();
-            for(var i = 0; i <= day; i++){
-                $(`rect[data-date="${moment(moment().format()).add(-i, "days").format("YYYY-MM-DD")}"].ContributionCalendar-day`)
+            let weekarray = [];
+            let day = dayjs().day();
+            for(let i = 0; i <= day; i++){
+                $(`rect[data-date="${dayjs(dayjs().format()).add(-i, "d").format("YYYY-MM-DD")}"].ContributionCalendar-day`)
                     .each(function(){
                         weekarray.unshift(Number($(this).attr("data-count")))
                 })
@@ -95,10 +97,10 @@ app.get('/:user/monthcount', function(req, res){
     getHTML(req.params.user)
         .then((html) => {
             const $ = cheerio.load(html.data);
-            var monthcount = 0;
-            var day = moment().date();
-            for(var i = 0; i < day; i++){
-                $(`rect[data-date="${moment(moment().format()).add(-i, "days").format("YYYY-MM-DD")}"].ContributionCalendar-day`)
+            let monthcount = 0;
+            let day = dayjs().date();
+            for(let i = 0; i < day; i++){
+                $(`rect[data-date="${dayjs(dayjs().format()).add(-i, "d").format("YYYY-MM-DD")}"].ContributionCalendar-day`)
                     .each(function(){
                         monthcount += Number($(this).attr("data-count"))
                 })
@@ -114,10 +116,10 @@ app.get('/:user/montharray', function(req, res){
     getHTML(req.params.user)
         .then((html) => {
             const $ = cheerio.load(html.data);
-            var montharray = [];
-            var day = moment().date();
-            for(var i = 0; i < day; i++){
-                $(`rect[data-date="${moment(moment().format()).add(-i, "days").format("YYYY-MM-DD")}"].ContributionCalendar-day`)
+            let montharray = [];
+            let day = dayjs().date();
+            for(let i = 0; i < day; i++){
+                $(`rect[data-date="${dayjs(dayjs().format()).add(-i, "d").format("YYYY-MM-DD")}"].ContributionCalendar-day`)
                     .each(function(){
                         montharray.unshift(Number($(this).attr("data-count")))
                 })
@@ -149,12 +151,12 @@ app.get('/:user/yeararray', function(req, res){
 
 app.get('/:user', function(req, res){
     const montharray = [];
-    var yearcount = 0;
-    var monthcount = 0;
-    var weekcount = 0;
-    var daycount = 0;
-    var mdate = moment().date();
-    var mday = moment().day();
+    let yearcount = 0;
+    let monthcount = 0;
+    let weekcount = 0;
+    let daycount = 0;
+    let mdate = dayjs().date();
+    let mday = dayjs().day();
     getHTML(req.params.user) 
         .then((html) => {
             const $ = cheerio.load(html.data);
@@ -165,16 +167,16 @@ app.get('/:user', function(req, res){
                     if(count){
                         yearcount += Number(count);
                     }
-                    if(mdate >= 0 && date == `${moment(moment().format()).add(-mdate, "days").format("YYYY-MM-DD")}`){
+                    if(mdate >= 0 && date == `${dayjs(dayjs().format()).add(-mdate, "days").format("YYYY-MM-DD")}`){
                         montharray.unshift(Number(count));
                         monthcount += Number(count);
                         mdate--;
                     }
-                    if(mday >= 0 && date == `${moment(moment().format()).add(-mday, "days").format("YYYY-MM-DD")}`){
+                    if(mday >= 0 && date == `${dayjs(dayjs().format()).add(-mday, "days").format("YYYY-MM-DD")}`){
                         weekcount += Number(count);
                         mday--; 
                     }
-                    if(date == `${moment().format('YYYY-MM-DD')}`){
+                    if(date == `${dayjs().format('YYYY-MM-DD')}`){
                         daycount += Number(count);
                     }
             })
@@ -184,6 +186,7 @@ app.get('/:user', function(req, res){
             res.status(err.status).send(err)
         })
 })
+
 
 const server = app.listen(process.env.PORT || 5000, () => {
     const port = server.address().port;
