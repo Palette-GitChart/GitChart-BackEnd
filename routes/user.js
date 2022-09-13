@@ -16,6 +16,7 @@ function getAll(user){
         let mday = dayjs().day();
         getHTML(user) 
             .then((html) => {
+                if(html === false) resolve(false);
                 const $ = cheerio.load(html.data);
                 $(`rect.ContributionCalendar-day`)
                     .each(function(){
@@ -45,6 +46,9 @@ function getAll(user){
 
 route.get("/:user", async function(req, res){
     const all = await getAll(req.params.user);
+
+    if(all === false) res.status(400).send("No matching users");
+
     res.json(all);
 })
 

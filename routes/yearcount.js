@@ -9,13 +9,15 @@ function getYearCount(user){
     return new Promise((resolve, reject) => {
         getHTML(user)
             .then((html) => {
+                if(html === false) resolve(false);
                 const $ = cheerio.load(html.data);
                 let yearcount = 0;
                 $(`rect.ContributionCalendar-day`)
                     .each(function(){
                         if($(this).attr("data-count"))
                             yearcount += (Number($(this).attr("data-count")))
-                })
+                    })
+
                 resolve(yearcount);
             })
     })
@@ -23,6 +25,9 @@ function getYearCount(user){
 
 route.get("/:user/yearcount", async function(req, res){
     const yearCount = await getYearCount(req.params.user);
+        
+    if(yearCount === false) res.status(400).send("No matching users");
+
     res.json(yearCount);
 })
 

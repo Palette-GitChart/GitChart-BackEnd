@@ -9,6 +9,7 @@ function getMonthArray(user){
     return new Promise((resolve, reject) => {
         getHTML(user)
             .then((html) => {
+                if(html === false) resolve(false);
                 const $ = cheerio.load(html.data);
                 let montharray = [];
                 let day = dayjs().date();
@@ -16,7 +17,7 @@ function getMonthArray(user){
                     $(`rect[data-date="${dayjs(dayjs().format()).add(-i, "d").format("YYYY-MM-DD")}"].ContributionCalendar-day`)
                         .each(function(){
                             montharray.unshift(Number($(this).attr("data-count")))
-                    })
+                        })
                 }
                 resolve(montharray);
             })
@@ -25,6 +26,9 @@ function getMonthArray(user){
 
 route.get("/:user/montharray", async function(req, res){
     const monthArray = await getMonthArray(req.params.user);
+
+    if(monthArray === false) res.status(400).send("No matching users");
+
     res.json(monthArray);
 })
 

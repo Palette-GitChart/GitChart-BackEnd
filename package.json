@@ -1,7 +1,7 @@
 {
-  "name": "server",
-  "type": "module",
+  "name": "gitubCrawler",
   "version": "1.0.0",
+  "type": "module",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -9,36 +9,20 @@
     "start": "pm2-runtime ./index.js -i max --exec babel-node",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/biscrab/uolib.git"
-  },
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/biscrab/uolib/issues"
-  },
-  "homepage": "https://github.com/biscrab/uolib#readme",
   "dependencies": {
-    "axios": "^0.21.4",
-    "babel-cli": "^6.26.0",
-    "body-parser": "^1.19.0",
-    "cookie-parser": "^1.4.6",
+    "axios": "^0.25.0",
+    "cheerio": "*",
     "cors": "^2.8.5",
-    "express": "^4.17.1",
-    "jsonwebtoken": "^8.5.1",
-    "moment": "^2.29.1",
-    "moment-timezone": "^0.5.34",
+    "dayjs": "^1.8.36",
+    "express": "^4.17.2",
     "mysql": "^2.18.1",
-    "nodemailer": "^6.7.2",
     "pm2": "^5.1.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.17.6",
     "@babel/core": "^7.17.8",
-    "@babel/node": "^7.16.8",
-    "@babel/polyfill": "^7.12.1",
-    "@babel/preset-env": "^7.16.11",
-    "babel-loader": "^8.2.4"
+    "@babel/preset-env": "^7.16.11"
   }
 }
