@@ -1,7 +1,7 @@
 module.exports = {
     apps: [
         {
-            name: 'githubCrawler',
+            name: 'gitchart-backend',
             script: './index.js',
             instances: "max",
             exec_mode: 'cluster'
